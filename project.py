@@ -26,9 +26,31 @@ if cnx.is_connected():
        q1="create table if not exists details(slno int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no int(15),EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 1000);"
        cur.execute(q1)
 
-       def login():
+      def login():
               login_Screen=Toplevel(root)
               login_Screen.title("login")
+              login_Screen.geometry("1000x500")
+              login_Screen.configure(background='#252525')
+
+              global temp_slno
+              temp_slno = StringVar()
+              global temp_password
+              temp_password = StringVar()
+              
+              l1=ct.CTkLabel(login_Screen,text=" ** Enter Your details here ** ",font=('Portico Diagonal',26),text_color='white')
+              l1.place(x=50)
+              l2=ct.CTkLabel(login_Screen,text=" Account Number ",font=('Portico Diagonal',22),text_color='white')
+              l2.place(x=50,y=50)
+              l3=ct.CTkLabel(login_Screen,text=" password ",font=('Portico Diagonal',22),text_color='white')
+              l3.place(x=50,y=100)
+              e1=ct.CTkEntry(login_Screen,textvariable=temp_slno)
+              e1.place(x=300,y=50)
+              e2=ct.CTkEntry(login_Screen,textvariable=temp_password)
+              e2.place(x=300,y=100)
+              b1=ct.CTkButton(login_Screen,text="Login",font=('Portico Diagonal',20))
+              b1.place(x=300,y=150)
+              b2=ct.CTkButton(login_Screen,text="Forgot password",font=('Portico Diagonal',20))
+              b2.place(x=50,y=150)
 
        
        def registration():
