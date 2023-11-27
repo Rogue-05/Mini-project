@@ -132,11 +132,11 @@ if cnx.is_connected():
               pn=temp_phone.get()
 
               if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
-                     notif1.config(fg="red",text="All fields need to be filled")
+                     notif1.configure(fg="red",text="All fields need to be filled")
               elif (re.fullmatch(regex, email)):
                      pass
               else:
-                     notif1.config(fg="red",text="invalid email entered")
+                     notif1.configure(fg="red",text="invalid email entered")
               chk=0
               x="use project;"
               cur.execute(x)
@@ -146,10 +146,10 @@ if cnx.is_connected():
               print(data)
               for i in data:
                      if name in i:
-                            notif1.config(fg="red",text="Account already exists")
+                            notif1.configure(fg="red",text="Account already exists")
                             chk+=1
                      else:
-                            notif1.config(fg='green',text='Registration successful',font=('Calibri,36'))
+                            notif1.configure(fg='green',text='Registration successful',font=('Calibri,36'))
               if chk==0:        
                      x="use project;"
                      cur.execute(x)
