@@ -9,18 +9,13 @@ import re
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
  
 
-    if(re.fullmatch(regex, email)):
-        print("Valid Email")
- 
-    else:
-        print("Invalid Email")
-
+   
 root = Tk() 
 root.title('PES INTERNATIONAL BANK')
 root.geometry('1000x1000')
 cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
 
-if cnx.isconnected():
+if cnx.is_connected():
   print('connected')
   cur=cnx.cursor()
   cur.execute('create database if not exists project;')
@@ -33,7 +28,7 @@ if cnx.isconnected():
          Phone_no int(10),
          EMAIL varchar(50),
          password varchar(10) NOT NULL
-         BALANCE int DEFAULT 1000)'''
+         BALANCE int Default 1000)'''
   cur.execute(q1)
   def registration():
         Register_screen=Toplevel(root)
@@ -103,10 +98,9 @@ def finish_reg():
 
 if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
             notif1.config(fg="red",text="All fields need to be filled")
-elif:
-            (re.fullmatch(regex, email)):
+elif(re.fullmatch(regex, email)):
             notif1.config(fg="green",text="registeration success")
-            else:
+else:
             notif1.config(fg="red",text="invalid email entered")
 chk=0
 x="use project;"
@@ -124,7 +118,7 @@ for i in data:
 if chk==0:        
             x="use project;"
             cur.execute(x)
-            query3="insert into bank values(DEFAULT,'{}',{},'{}',{},'{}','{}',default);".format(name,age,gender,phone,email,password)
+            query3="insert into bank values(Default,'{}',{},'{}',{},'{}','{}',Default);".format(name,age,gender,phone,email,password)
             cur.execute(query3)
             cnx.commit()
 
