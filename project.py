@@ -1,8 +1,17 @@
 from tkinter import *
+import customtkinter as ct
+from PIL import Image
 import mysql.connector as mysql
-from tkinter import messagebox 
-
 import re
+
+# Welcome Page
+root=ct.CTk()
+root.geometry("540x450")
+root.title("PES International Bank")
+root.config(background='white')
+
+
+
  
 # Make a regular expression
 # for validating an Email
@@ -10,10 +19,8 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
  
 
    
-root = Tk() 
-root.title('PES INTERNATIONAL BANK')
-root.geometry('1000x1000')
-cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
+
+cnx=mysql.connect(user='root',password='SQL123',host='localhost')
 
 if cnx.is_connected():
   print('connected')
@@ -30,6 +37,8 @@ if cnx.is_connected():
          password varchar(10) NOT NULL,
          BALANCE int Default 1000)'''
   cur.execute(q1)
+
+
   def registration():
         Register_screen=Toplevel(root)
         Register_screen.title("Registration")
@@ -121,6 +130,17 @@ def finish_reg():
             query3="insert into details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age,gender,pn,email,password)
             cur.execute(query3)
             cnx.commit()
+label=ct.CTkLabel(root,text='Welcome to PES International Bank',font=('Arial',22),bg_color='white',text_color='black')
+photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo2.png"),size=(350,250))
+label.place(x=100,y=250)
+label2=ct.CTkLabel(root,image=photo1,text="")
+label2.place(x=100)
+button1=ct.CTkButton(root,text='Log in',bg_color='white')
+button1.place(x=100,y=300)
+button2=ct.CTkButton(root,text='Sign Up',bg_color='white',command=registration)
+button2.place(x=310,y=300)
+
+root.mainloop()
 
 
 
@@ -130,9 +150,6 @@ def finish_reg():
 
 
 
-
-
-Button(root,text='register',command=registration).pack()
 
     
   
