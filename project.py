@@ -1,9 +1,4 @@
 from tkinter import *
-import mysql.connector as mysql
-from tkinter import messagebox 
-import customtkinter as ctk
-import re
- 
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -14,6 +9,7 @@ root = Tk()
 root.title('PES INTERNATIONAL BANK')
 root.geometry('1000x1000')
 cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
+
 
 if cnx.is_connected():
   print('connected')
@@ -27,7 +23,7 @@ if cnx.is_connected():
          Gender varchar(2),
          Phone_no int(10),
          EMAIL varchar(50),
-         password varchar(10) NOT NULL
+         password varchar(10) NOT NULL,
          BALANCE int Default 1000)'''
   cur.execute(q1)
   def registration():
@@ -50,14 +46,14 @@ if cnx.is_connected():
         l6.grid(row=5,sticky=W)
         l7=Label(Register_screen,text='Phone Number',font=('calibri',24))
         l7.grid(row=4,sticky=W)
-
-    
         global temp_name
         global temp_age
         global temp_gender
         global temp_password
         global temp_email
         global temp_phone
+    
+        
         temp_name=StringVar()
         temp_age=IntVar()
         temp_gender=StringVar()
@@ -89,33 +85,33 @@ if cnx.is_connected():
 
 def finish_reg():
   print('done')
-  name=temp_name.get()
-  age=temp_name.get()
-  gender=temp_name.get()
-  password=temp_name.get()
-  email=temp_name.get()
-  pn=temp_name.get()
+  nam=temp_name.get()
+  age=temp_age.get()
+  gender=temp_gender.get()
+  password=temp_password.get()
+  email=temp_email.get()
+  pn=temp_phone.get()
 
-if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
+  if nam=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
             notif1.config(fg="red",text="All fields need to be filled")
-elif(re.fullmatch(regex, email)):
+  elif(re.fullmatch(regex, email)):
             notif1.config(fg="green",text="registeration success")
-else:
+  else:
             notif1.config(fg="red",text="invalid email entered")
-chk=0
-x="use project;"
-cur.execute(x)
-query="select name from bank"
-cur.execute(query)
-data=cur.fetchall()
-print(data)
-for i in data:
+  chk=0
+  x="use project;"
+  cur.execute(x)
+  query="select name from bank"
+  cur.execute(query)
+  data=cur.fetchall()
+  print(data)
+  for i in data:
             if name in i:
                 notif1.config(fg="red",text="Account already exists")
                 chk+=1
             else:
                 notif1.config(fg='green',text='Registration successful',font=('Calibri,36'))
-if chk==0:        
+  if chk==0:        
             x="use project;"
             cur.execute(x)
             query3="insert into bank values(Default,'{}',{},'{}',{},'{}','{}',Default);".format(name,age,gender,phone,email,password)
@@ -133,6 +129,11 @@ if chk==0:
 
 
 Button(root,text='register',command=registration).pack()
+
+    
+  
+         
+
 
     
   
