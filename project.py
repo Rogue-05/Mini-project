@@ -1,4 +1,9 @@
 from tkinter import *
+import mysql.connector as mysql
+from tkinter import messagebox 
+
+import re
+ 
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -9,7 +14,6 @@ root = Tk()
 root.title('PES INTERNATIONAL BANK')
 root.geometry('1000x1000')
 cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
-
 
 if cnx.is_connected():
   print('connected')
@@ -85,23 +89,23 @@ if cnx.is_connected():
 
 def finish_reg():
   print('done')
-  nam=temp_name.get()
+  name=temp_name.get()
   age=temp_age.get()
   gender=temp_gender.get()
   password=temp_password.get()
   email=temp_email.get()
   pn=temp_phone.get()
 
-  if nam=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
+  if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
             notif1.config(fg="red",text="All fields need to be filled")
-  elif(re.fullmatch(regex, email)):
-            notif1.config(fg="green",text="registeration success")
+  elif (re.fullmatch(regex, email)):
+            pass
   else:
             notif1.config(fg="red",text="invalid email entered")
   chk=0
   x="use project;"
   cur.execute(x)
-  query="select name from bank"
+  query="select name from details"
   cur.execute(query)
   data=cur.fetchall()
   print(data)
@@ -114,7 +118,7 @@ def finish_reg():
   if chk==0:        
             x="use project;"
             cur.execute(x)
-            query3="insert into details values(Default,'{}',{},'{}',{},'{}','{}',Default);".format(name,age,gender,phone,email,password)
+            query3="insert into details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age,gender,pn,email,password)
             cur.execute(query3)
             cnx.commit()
 
@@ -129,11 +133,6 @@ def finish_reg():
 
 
 Button(root,text='register',command=registration).pack()
-
-    
-  
-         
-
 
     
   
