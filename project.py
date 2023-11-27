@@ -12,16 +12,9 @@ root=ct.CTk()
 root.geometry("540x450")
 root.title("PES International Bank")
 
-
-
-
- 
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
- 
-
-   
 
 cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
 
@@ -36,28 +29,6 @@ if cnx.is_connected():
        def login():
               login_Screen=Toplevel(root)
               login_Screen.title("login")
-              login_Screen.geometry("1000x500")
-              login_Screen.configure(background='#252525')
-
-              global temp_slno
-              temp_slno = StringVar()
-              global temp_password
-              temp_password = StringVar()
-              
-              l1=ct.CTkLabel(login_Screen,text=" ** Enter Your details here ** ",font=('Portico Diagonal',26),text_color='white')
-              l1.place(x=50)
-              l2=ct.CTkLabel(login_Screen,text=" Account Number ",font=('Portico Diagonal',22),text_color='white')
-              l2.place(x=50,y=50)
-              l3=ct.CTkLabel(login_Screen,text=" password ",font=('Portico Diagonal',22),text_color='white')
-              l3.place(x=50,y=100)
-              e1=ct.CTkEntry(login_Screen,textvariable=temp_slno)
-              e1.place(x=300,y=50)
-              e2=ct.CTkEntry(login_Screen,textvariable=temp_password)
-              e2.place(x=300,y=100)
-              b1=ct.CTkButton(login_Screen,text="Login",font=('Portico Diagonal',20))
-              b1.place(x=300,y=150)
-              b2=ct.CTkButton(login_Screen,text="Forgot password",font=('Portico Diagonal',20))
-              b2.place(x=50,y=150)
 
        
        def registration():
@@ -125,11 +96,11 @@ if cnx.is_connected():
        def finish_reg():
               print('done')
               name=temp_name.get()
-              age=temp_age.get()
+              age=int(temp_age.get())
               gender=temp_gender.get()
               password=temp_password.get()
               email=temp_email.get()
-              pn=temp_phone.get()
+              pn=int(temp_phone.get())
 
               if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
                      notif1.configure(fg="red",text="All fields need to be filled")
@@ -149,7 +120,7 @@ if cnx.is_connected():
                             notif1.configure(fg="red",text="Account already exists")
                             chk+=1
                      else:
-                            notif1.configure(fg='green',text='Registration successful',font=('Calibri,36'))
+                            notif1.configure(fg='green',text='Registration successful',font=('Calibri',36))
               if chk==0:        
                      x="use project;"
                      cur.execute(x)
@@ -170,19 +141,3 @@ if cnx.is_connected():
        button2.place(x=310,y=300)
 
 root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-    
-  
-         
-
