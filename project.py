@@ -23,7 +23,7 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
    
 
-cnx=mysql.connect(user='root',password='SQL123',host='localhost')
+cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
 
 if cnx.is_connected():
        print('connected')
@@ -137,17 +137,18 @@ if cnx.is_connected():
 
 
 # Welcome Page 
-label=ct.CTkLabel(root,text='Welcome to PES International Bank',font=('Arial',22),text_color='White')
-photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(350,250))
-label.place(x=100,y=250)
-label2=ct.CTkLabel(root,image=photo1,text="")
-label2.place(x=100)
-button1=ct.CTkButton(root,text='Log in')
-button1.place(x=100,y=300)
-button2=ct.CTkButton(root,text='Sign Up',command=registration)
-button2.place(x=310,y=300)
+       label=ct.CTkLabel(root,text='Welcome to PES International Bank',font=('Arial',22),text_color='White')
+       photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(350,250))
+       label.place(x=100,y=250)
+       label2=ct.CTkLabel(root,image=photo1,text="")
+       label2.place(x=100)
+       button1=ct.CTkButton(root,text='Log in')
+       button1.place(x=100,y=300)
+       button2=ct.CTkButton(root,text='Sign Up',command=registration)
+       button2.place(x=310,y=300)
 
 root.mainloop()
+
 
 
 
