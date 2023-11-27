@@ -103,7 +103,8 @@ def finish_reg():
 
 if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
             notif1.config(fg="red",text="All fields need to be filled")
-elif (re.fullmatch(regex, email)):
+elif:
+            (re.fullmatch(regex, email)):
             notif1.config(fg="green",text="registeration success")
             else:
             notif1.config(fg="red",text="invalid email entered")
