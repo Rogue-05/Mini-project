@@ -114,7 +114,7 @@ def finish_reg():
   if chk==0:        
             x="use project;"
             cur.execute(x)
-            query3="insert into bank values(Default,'{}',{},'{}',{},'{}','{}',Default);".format(name,age,gender,phone,email,password)
+            query3="insert into details values(Default,'{}',{},'{}',{},'{}','{}',Default);".format(name,age,gender,phone,email,password)
             cur.execute(query3)
             cnx.commit()
 
