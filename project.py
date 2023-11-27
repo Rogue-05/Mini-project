@@ -79,6 +79,8 @@ if cnx.isconnected():
         b1=Button(Register_screen,text="Register now",command=finish_reg,padx=100)
         b1.grid(row=6)
 
+Button(root,text='register',command=registration).pack()
+
     
   
          
