@@ -1,1 +1,30 @@
+from tkinter import *
+import customtkinter as ct
 
+ct.set_appearance_mode('dark')
+ct.set_default_color_theme('dark-blue')
+
+root=ct.CTk()
+root.geometry("1000x1000")
+root.title("geometry")
+
+depo_screen=ct.CTkToplevel(root)
+depo_screen.geometry("300x500")
+depo_screen.title("Deposit")
+
+ct.CTkLabel(depo_screen,text="Deposit here",font=('Portico Diagnol',12)).grid(row=1,sticky=W)
+
+ct.CTkLabel(depo_screen,text="Account id :",font=('Portico Diagnol',12)).grid(row=2,sticky=W)
+ct.CTkLabel(depo_screen,text="password:",font=('Portico Diagnol',12)).grid(row=3,sticky=W)
+ct.CTkLabel(depo_screen,text="Amount :",font=('Portico Diagnol',12)).grid(row=4,sticky=W)
+deposit_notif=ct.CTkLabel(depo_screen,font=('Portico Diagnol',12,),text="")
+deposit_notif.grid(row=4)
+
+ct.CTkEntry(depo_screen,width=60).grid(row=2,column=1)
+ct.CTkEntry(depo_screen,width=60).grid(row=3,column=1)
+ct.CTkEntry(depo_screen,width=60).grid(row=4,column=1)
+        
+
+ct.CTkButton(depo_screen,text="Deposit now").grid(row=6)
+
+root.mainloop()
