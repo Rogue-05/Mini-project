@@ -12,13 +12,11 @@ root=ct.CTk()
 root.geometry("540x450")
 root.title("PES International Bank")
 
-
-
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
+cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
 
 if cnx.is_connected():
        print('connected')
@@ -168,7 +166,10 @@ if cnx.is_connected():
               if len(temp_newpwd.get())==0:
                      notif5.configure(text='New Password can not be empty',fg_color='red')
               else:
-                     x="update new_details password='{}' where Account_ID='{}';".format(temp_newpwd,acc_no1)
+                     newp=temp_newpwd.get()
+                     x="update new_details set password='{}' where Account_ID={};".format(newp,acc_no1)
+                     cur.execute(x)
+                     cnx.commit()
                      notif5.configure(text='Password Successfully changed',fg_color='green')
 
 
