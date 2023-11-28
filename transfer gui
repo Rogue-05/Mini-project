@@ -1,25 +1,33 @@
+from tkinter import *
+import customtkinter as ct 
+
+ct.set_appearance_mode('dark')
+ct.set_default_color_theme('dark-blue')
+
 root=ct.CTk()
 root.geometry("1000x1000")
 root.title("Transfer")
 
 transfer_screen=ct.CTkToplevel(root)
-transfer_screen.geometry("1000x1000")
+transfer_screen.geometry("300x500")
 
-ct.CTkLabel(transfer_screen,text="transfer here",font=('Calibri',12)).grid(row=0,sticky=N)
+ct.CTkLabel(transfer_screen,text="transfer here",font=('Portico Diagnol',16)).grid(row=0,sticky=N)
         
-ct.CTkLabel(transfer_screen,text="from account:",font=('Calibri',12)).grid(row=2,sticky=W)
-ct.CTkLabel(transfer_screen,text="to account:",font=('Calibri',12)).grid(row=3,sticky=W)
-ct.CTkLabel(transfer_screen,text="Amount :",font=('Calibri',12)).grid(row=4,sticky=W)
-transfer_notif=Label(transfer_screen,font=('Calibri',12))
-transfer_notif.grid(row=4)
+ct.CTkLabel(transfer_screen,text="from account:",font=('Portico Diagnol',16)).grid(row=2,sticky=W)
+ct.CTkLabel(transfer_screen,text="to account:",font=('Portico Diagnol',16)).grid(row=3,sticky=W)
+ct.CTkLabel(transfer_screen,text="Amount :",font=('Portico Diagnol',16)).grid(row=4,sticky=W)
+ct.CTkLabel(transfer_screen,text="Password :",font=('Portico Diagnol',16)).grid(row=5,sticky=W)
+transfer_notif=Label(transfer_screen,font=('Portico Diagnol',16))
+transfer_notif.grid(row=6)
 
-ct.CTkEntry(transfer_screen,width=20).grid(row=2,column=1)
-ct.CTkEntry(transfer_screen,width=20).grid(row=3,column=1)
-ct.CTkEntry(transfer_screen,width=20).grid(row=4,column=1)
+ct.CTkEntry(transfer_screen,width=60).grid(row=2,column=1)
+ct.CTkEntry(transfer_screen,width=60).grid(row=3,column=1)
+ct.CTkEntry(transfer_screen,width=60).grid(row=4,column=1)
+ct.CTkEntry(transfer_screen,width=60).grid(row=5,column=1)
         
         
         
-ct.CTkButton(transfer_screen,text="transfer now").grid(row=6)
+ct.CTkButton(transfer_screen,text="transfer now").grid(row=7)
 
 
 root.mainloop()
