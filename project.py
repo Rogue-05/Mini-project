@@ -12,6 +12,8 @@ root=ct.CTk()
 root.geometry("540x450")
 root.title("PES International Bank")
 
+
+
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -28,15 +30,18 @@ if cnx.is_connected():
        
 
        def login():
+              global notif2
               global login_Screen
+              global temp_password
+              global temp_slno
+
               login_Screen=Toplevel(root)
               login_Screen.title("login")
               login_Screen.geometry("1000x500")
               login_Screen.configure(background='#252525')
 
-              global temp_slno
+              
               temp_slno = StringVar()
-              global temp_password
               temp_password = StringVar()
               
               l1=ct.CTkLabel(login_Screen,text=" ** Enter Your details here ** ",font=('Portico Diagonal',26),text_color='white')
@@ -53,12 +58,12 @@ if cnx.is_connected():
               b1.place(x=300,y=150)
               b2=ct.CTkButton(login_Screen,text="Forgot password",font=('Portico Diagonal',20),command=forgot_password)
               b2.place(x=50,y=150)
-              global notif2
               notif2=ct.CTkLabel(login_Screen,text="",font=('Portico Diagonal',22))
               notif2.place(x=50,y=200)
               
 
        def finish_login():
+            
             global acc_no
             global passwd
             global slno
@@ -88,14 +93,17 @@ if cnx.is_connected():
                  
                     notif2.configure(fg_color="red",text="Incorrect Details !")
                     return
+            
        def forgot_password():
               global for_pass
-              global temp_email
-              global temp_phone
+              global temp_email1
+              global temp_phone1
               global notif4
+              global temp_slno1
 
-              temp_phone=StringVar()
-              temp_email=StringVar()
+              temp_phone1=StringVar()
+              temp_email1=StringVar()
+              temp_slno1=StringVar()
 
 
               for_pass=Toplevel(root)
@@ -113,15 +121,57 @@ if cnx.is_connected():
               l3.place(x=50,y=100)
               l4=ct.CTkLabel(for_pass,text="Phone Number -",font=('Portico Diagonal',22))
               l4.place(x=50,y=150)
-              e1=ct.CTkEntry(for_pass,textvariable=temp_slno)
+              e1=ct.CTkEntry(for_pass,textvariable=temp_slno1)
               e1.place(x=300,y=50)
-              e2=ct.CTkEntry(for_pass,textvariable=temp_email)
+              e2=ct.CTkEntry(for_pass,textvariable=temp_email1)
               e2.place(x=300,y=100)
-              e3=ct.CTkEntry(for_pass,textvariable=temp_phone)
+              e3=ct.CTkEntry(for_pass,textvariable=temp_phone1)
               e3.place(x=300,y=150)
-              b1=ct.CTkButton(for_pass,bg_color='#252525',text='Proceed')
+              b1=ct.CTkButton(for_pass,bg_color='#252525',text='Proceed',command=finish_forgpwd)
               b1.place(x=300,y=200)
               
+       def finish_forgpwd():
+              global temp_newpwd
+              temp_newpwd=StringVar()
+              global acc_no1
+              acc_no1=int(temp_slno1.get())
+              x1="select * from new_details where Account_ID='{}';".format(acc_no1)
+              cur.execute(x1)
+              data=cur.fetchall()
+              if data==[]:
+                     notif4.configure(text='Invalid Account number',fg_color='red')
+              else:
+                     for i in data:
+                            if i[4]==int(temp_phone1.get()) and i[5]==str(temp_email1.get()):
+                                   notif4.configure(text='Verified!',fg_color='green')
+
+                                   global notif5
+
+                                   final_forgscreen=Toplevel(root)
+                                   final_forgscreen.geometry("1000x500")
+                                   final_forgscreen.title("Update Password")
+                                   final_forgscreen.configure(background='#252525')
+
+                                   l1=ct.CTkLabel(final_forgscreen,text='New password',font=('Portico Diagonal',22),text_color='white')
+                                   l1.place(x=25,y=50)
+                                   l2=ct.CTkLabel(final_forgscreen,text='*Update password here*',font=('Portico Diagonal',30),text_color='white')
+                                   l2.place(x=50)
+                                   e1=ct.CTkEntry(final_forgscreen,textvariable=temp_newpwd,show='*')
+                                   e1.place(x=325,y=50)
+                                   b1=ct.CTkButton(final_forgscreen,bg_color='#252525',text="Confirm",command=update_psswd)
+                                   b1.place(x=325,y=100)
+                                   notif5=ct.CTkLabel(final_forgscreen,text="",font=('Portico Diagonal',20),fg_color='green')
+                                   notif5.place(x=50,y=150)
+                            else:
+                                   notif4.configure(text='Invalid Details!',fg_color='red')
+       def update_psswd():
+              if len(temp_newpwd.get())==0:
+                     notif5.configure(text='New Password can not be empty',fg_color='red')
+              else:
+                     x="update new_details password='{}' where Account_ID='{}';".format(temp_newpwd,acc_no1)
+                     notif5.configure(text='Password Successfully changed',fg_color='green')
+
+
 
        def registration():
               Register_screen=Toplevel(root)
@@ -242,6 +292,7 @@ if cnx.is_connected():
 
 
 # Welcome Page 
+
        label=ct.CTkLabel(root,text='Welcome to PES International Bank',font=('Arial',22),text_color='White')
        photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(350,250))
        label.place(x=100,y=250)
@@ -252,8 +303,10 @@ if cnx.is_connected():
        button2=ct.CTkButton(root,text='Sign Up',command=registration)
        button2.place(x=310,y=300)
        
+       
 
 root.mainloop()
+
 
 
 
