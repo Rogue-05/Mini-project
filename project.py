@@ -18,7 +18,7 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL123',host='localhost')
+cnx=mysql.connect(user='root',password='Rogue@05',host='localhost')
 
 if cnx.is_connected():
        print('connected')
@@ -259,35 +259,35 @@ if cnx.is_connected():
               pn1=int(pn)
               if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
                      notif1.configure(fg_color="red",text="All fields need to be filled",font=('Portico Diagonal',16))
-              if (re.fullmatch(regex, email)):
-                     pass
-              else:
-                     notif1.configure(fg_color="red",text="invalid email entered",font=('Portico Diagonal',22))
-              chk=0
-              x="use project;"
-              cur.execute(x)
-              query="select name from new_details;"
-              cur.execute(query)
-              data=cur.fetchall()
-              print(data)
-              for i in data:
-                     if name in i:
-                            notif1.configure(fg_color="red",text="Account already exists",font=('Portico Diagonal',16))
-                            chk+=1
-                     else:
-                            notif1.configure(fg_color='green',text='Registration successful',font=('Portico Diagonal',20))
-              if chk==0:        
+              if bool((re.fullmatch(regex, email)))==True:
+                     chk=0
                      x="use project;"
                      cur.execute(x)
-                     query3="insert into new_details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age1,gender,pn1,email,password)
-                     cur.execute(query3)
-                     cnx.commit()
-                     y="select Account_ID from new_details where password='{}';".format(password)
-                     cur.execute(y)
-                     data=cur.fetchone()
-                     acc_no=str(data[0])
-                     notif3.configure(text="Account number generated : "+acc_no,fg_color='green')
+                     query="select name from new_details;"
+                     cur.execute(query)
+                     data=cur.fetchall()
+                     print(data)
+                     for i in data:
+                          if name in i:
+                            notif1.configure(fg_color="red",text="Account already exists",font=('Portico Diagonal',16))
+                            chk+=1
+                          else:
+                            notif1.configure(fg_color='green',text='Registration successful',font=('Portico Diagonal',20))
+                     if chk==0:        
+                          x="use project;"
+                          cur.execute(x)
+                          query3="insert into new_details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age1,gender,pn1,email,password)
+                          cur.execute(query3)
+                          cnx.commit()
+                          y="select Account_ID from new_details where password='{}';".format(password)
+                          cur.execute(y)
+                          data=cur.fetchone()
+                          acc_no=str(data[0])
+                          notif3.configure(text="Account number generated : "+acc_no,fg_color='green')
 
+              else:
+                     notif1.configure(fg_color="red",text="invalid email entered",font=('Portico Diagonal',22))
+              
 
 
 
@@ -306,6 +306,23 @@ if cnx.is_connected():
        
 
 root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  
+         
+
 
 
 
