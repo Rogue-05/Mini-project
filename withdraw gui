@@ -1,0 +1,32 @@
+from tkinter import *
+import customtkinter as ct 
+
+ct.set_appearance_mode('dark')
+ct.set_default_color_theme('dark-blue')
+
+root=ct.CTk()
+root.geometry("1000x1000")
+root.title("geometry")
+
+with_screen=ct.CTkToplevel(root)
+with_screen.geometry("300x500")
+with_screen.title("Withdraw")
+
+ct.CTkLabel(with_screen,text="Withdraw here",font=('Portico Diagnol',12)).grid(row=1,sticky=W)
+
+ct.CTkLabel(with_screen,text="Account id :",font=('Portico Diagnol',12)).grid(row=2,sticky=W)
+ct.CTkLabel(with_screen,text="password:",font=('Portico Diagnol',12)).grid(row=3,sticky=W)
+ct.CTkLabel(with_screen,text="Amount :",font=('Portico Diagnol',12)).grid(row=4,sticky=W)
+deposit_notif=ct.CTkLabel(with_screen,font=('Portico Diagnol',12,),text="")
+deposit_notif.grid(row=4)
+
+ct.CTkEntry(with_screen,width=60).grid(row=2,column=1)
+ct.CTkEntry(with_screen,width=60).grid(row=3,column=1)
+ct.CTkEntry(with_screen,width=60).grid(row=4,column=1)
+        
+
+ct.CTkButton(with_screen,text="Deposit now").grid(row=6)
+
+
+
+root.mainloop()
