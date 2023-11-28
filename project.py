@@ -23,8 +23,9 @@ if cnx.is_connected():
        cur=cnx.cursor()
        cur.execute('create database if not exists project;')
        cur.execute('use project;')
-       q1="create table if not exists new_details(slno int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no BIGINT,EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 1000);"
+       q1="create table if not exists new_details(Account_ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no BIGINT,EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 10000);"
        cur.execute(q1)
+       
 
        def login():
               global login_Screen
@@ -50,7 +51,7 @@ if cnx.is_connected():
               e2.place(x=300,y=100)
               b1=ct.CTkButton(login_Screen,text="Login",font=('Portico Diagonal',20),command=finish_login)
               b1.place(x=300,y=150)
-              b2=ct.CTkButton(login_Screen,text="Forgot password",font=('Portico Diagonal',20))
+              b2=ct.CTkButton(login_Screen,text="Forgot password",font=('Portico Diagonal',20),command=forgot_password)
               b2.place(x=50,y=150)
               global notif2
               notif2=ct.CTkLabel(login_Screen,text="",font=('Portico Diagonal',22))
@@ -58,43 +59,84 @@ if cnx.is_connected():
               
 
        def finish_login():
-            global u_name
-            u_name=temp_slno.get()
+            global acc_no
+            global passwd
+            global slno
             global pwd
+            global chk
+
+            slno=int(temp_slno.get())
             pwd=temp_password.get()
             query="select * from new_details;"
             cur.execute(query)
             data=cur.fetchall()
             chk=0
+
             for i in data:
-                name=i[1]
+                acc_no=i[0]
                 passwd=i[6]
 
-                if name==u_name and passwd==pwd:
+                if acc_no==slno and passwd==pwd:
                     chk+=1
                     break
             if chk==1:
                     print("Your account has been found")
+                    notif2.configure(fg_color='green',text="Login Successful !")
                     
                     
             else:
                  
                     notif2.configure(fg_color="red",text="Incorrect Details !")
                     return
-        
-       
+       def forgot_password():
+              global for_pass
+              global temp_email
+              global temp_phone
+              global notif4
 
+              temp_phone=StringVar()
+              temp_email=StringVar()
+
+
+              for_pass=Toplevel(root)
+              for_pass.geometry("1000x700")
+              for_pass.title("Reset Password")
+              for_pass.configure(background='#252525')
+
+              notif4=ct.CTkLabel(for_pass,text='',font=('Portico Diagonal',22))
+              notif4.place(x=50,y=250)
+              l1=ct.CTkLabel(for_pass,text='**Enter your details**',font=('Portico Diagonal',30),)
+              l1.place(x=50,y=0)
+              l2=ct.CTkLabel(for_pass,text="Account ID -",font=('Portico Diagonal',22))
+              l2.place(x=50,y=50)
+              l3=ct.CTkLabel(for_pass,text="Email ID -",font=('Portico Diagonal',22))
+              l3.place(x=50,y=100)
+              l4=ct.CTkLabel(for_pass,text="Phone Number -",font=('Portico Diagonal',22))
+              l4.place(x=50,y=150)
+              e1=ct.CTkEntry(for_pass,textvariable=temp_slno)
+              e1.place(x=300,y=50)
+              e2=ct.CTkEntry(for_pass,textvariable=temp_email)
+              e2.place(x=300,y=100)
+              e3=ct.CTkEntry(for_pass,textvariable=temp_phone)
+              e3.place(x=300,y=150)
+              b1=ct.CTkButton(for_pass,bg_color='#252525',text='Proceed')
+              b1.place(x=300,y=200)
+              
 
        def registration():
               Register_screen=Toplevel(root)
               Register_screen.title("Registration")
-              Register_screen.geometry("1000x1000")
+              Register_screen.geometry("1200x1200")
               Register_screen.configure(background='#252525')
        
         
               global notif1
-              notif1=ct.CTkLabel(Register_screen,text="",font=('Portico Rounded',36),text_color='white')
-              notif1.place(x=50,y=400)
+              global notif3
+
+              notif1=ct.CTkLabel(Register_screen,text="",font=('Portico Diagonal',36),text_color='white')
+              notif1.place(x=50,y=450)
+              notif3=ct.CTkLabel(Register_screen,text="",font=('Portico Diagonal',26),text_color='white')
+              notif3.place(x=50,y=500)
               l1=ct.CTkLabel(Register_screen,text=" ** Enter Your details here ** ",font=('Portico Diagonal',26),text_color='white')
               l1.place(x=40,y=50)
               l2=ct.CTkLabel(Register_screen,text="Name  ",font=('Portico Diagonal',22),text_color='white')
@@ -148,17 +190,26 @@ if cnx.is_connected():
               b1.place(x=300,y=400)
 
        def finish_reg():
+
+              global acc_no
+              global age1
+              global pn1
+
+              acc_no=StringVar()
+
               print('done')
               name=temp_name.get()
-              age=int(temp_age.get())
+              age=(temp_age.get())
               gender=temp_gender.get()
               password=temp_password.get()
               email=temp_email.get()
-              pn=int(temp_phone.get())
-
+              pn=(temp_phone.get())
+              
+              age1=int(age)
+              pn1=int(pn)
               if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
                      notif1.configure(fg_color="red",text="All fields need to be filled",font=('Portico Diagonal',16))
-              elif (re.fullmatch(regex, email)):
+              if (re.fullmatch(regex, email)):
                      pass
               else:
                      notif1.configure(fg_color="red",text="invalid email entered",font=('Portico Diagonal',22))
@@ -178,9 +229,16 @@ if cnx.is_connected():
               if chk==0:        
                      x="use project;"
                      cur.execute(x)
-                     query3="insert into new_details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age,gender,pn,email,password)
+                     query3="insert into new_details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age1,gender,pn1,email,password)
                      cur.execute(query3)
                      cnx.commit()
+                     y="select Account_ID from new_details where password='{}';".format(password)
+                     cur.execute(y)
+                     data=cur.fetchone()
+                     acc_no=str(data[0])
+                     notif3.configure(text="Account number generated : "+acc_no,fg_color='green')
+
+
 
 
 # Welcome Page 
@@ -193,8 +251,10 @@ if cnx.is_connected():
        button1.place(x=100,y=300)
        button2=ct.CTkButton(root,text='Sign Up',command=registration)
        button2.place(x=310,y=300)
+       
 
 root.mainloop()
+
 
 
 
