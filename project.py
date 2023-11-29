@@ -16,7 +16,7 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
+cnx=mysql.connect(user='root',password='SQL123',host='localhost',auth_plugin='mysql_native_password')
 
 if cnx.is_connected():
        print('connected')
@@ -50,7 +50,7 @@ if cnx.is_connected():
               l3.place(x=50,y=100)
               e1=ct.CTkEntry(login_Screen,textvariable=temp_slno)
               e1.place(x=300,y=50)
-              e2=ct.CTkEntry(login_Screen,textvariable=temp_password)
+              e2=ct.CTkEntry(login_Screen,textvariable=temp_password,show='*')
               e2.place(x=300,y=100)
               b1=ct.CTkButton(login_Screen,text="Login",font=('Portico Diagonal',20),command=finish_login)
               b1.place(x=300,y=150)
@@ -67,7 +67,9 @@ if cnx.is_connected():
             global slno
             global pwd
             global chk
+            global name
 
+            name=StringVar()
             slno=int(temp_slno.get())
             pwd=temp_password.get()
             query="select * from new_details;"
@@ -78,13 +80,37 @@ if cnx.is_connected():
             for i in data:
                 acc_no=i[0]
                 passwd=i[6]
+                name=i[1]
 
                 if acc_no==slno and passwd==pwd:
                     chk+=1
                     break
             if chk==1:
+                    
                     print("Your account has been found")
                     notif2.configure(fg_color='green',text="Login Successful !")
+                    dashboard=Toplevel(root)
+                    dashboard.geometry("1000x1000")
+                    dashboard.title("Dashboard")
+                    dashboard.configure(background='#252525')
+
+                    photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(150,100))
+
+                    l2=ct.CTkLabel(dashboard,text='',image=photo1)
+                    l2.place(x=75,y=35)
+                    l1=ct.CTkLabel(dashboard,text='Welcome to PESIB, '+str(name),font=('Portico Diagonal',30),text_color='white')
+                    l1.place(x=25)
+                    b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525')
+                    b1.place(x=25,y=150)
+                    b2=ct.CTkButton(dashboard,text='Transaction',font=('Portico Diagonal',22),bg_color='#252525')
+                    b2.place(x=25,y=200)
+                    b3=ct.CTkButton(dashboard,text='Transfer History',font=('Portico Diagonal',22),bg_color='#252525')
+                    b3.place(x=25,y=250)
+                    b4=ct.CTkButton(dashboard,text='Cards',font=('Portico Diagonal',22),bg_color='#252525')
+                    b4.place(x=25,y=300)
+                    b5=ct.CTkButton(dashboard,text='Log out',font=('Portico Diagonal',22),bg_color='#252525')
+                    b5.place(x=25,y=350)
+                    
                     
                     
             else:
@@ -92,6 +118,7 @@ if cnx.is_connected():
                     notif2.configure(fg_color="red",text="Incorrect Details !")
                     return
             
+                  
        def forgot_password():
               global for_pass
               global temp_email1
@@ -307,7 +334,6 @@ if cnx.is_connected():
        
 
 root.mainloop()
-
 
 
 
