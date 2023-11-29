@@ -9,22 +9,22 @@ root.geometry("1000x1000")
 root.title("geometry")
 
 depo_screen=ct.CTkToplevel(root)
-depo_screen.geometry("300x500")
+depo_screen.geometry("500x500")
 depo_screen.title("Deposit")
 
-ct.CTkLabel(depo_screen,text="Deposit here",font=('Portico Diagnol',12)).grid(row=1,sticky=W)
+ct.CTkLabel(depo_screen,text="Deposit here",font=('Portico Diagnol',24)).place(x=200,y=0)
 
-ct.CTkLabel(depo_screen,text="Account id :",font=('Portico Diagnol',12)).grid(row=2,sticky=W)
-ct.CTkLabel(depo_screen,text="password:",font=('Portico Diagnol',12)).grid(row=3,sticky=W)
-ct.CTkLabel(depo_screen,text="Amount :",font=('Portico Diagnol',12)).grid(row=4,sticky=W)
+ct.CTkLabel(depo_screen,text="Account id :",font=('Portico Diagnol',12)).place(x=0,y=60)
+ct.CTkLabel(depo_screen,text="password:",font=('Portico Diagnol',12)).place(x=0,y=100)
+ct.CTkLabel(depo_screen,text="Amount :",font=('Portico Diagnol',12)).place(x=0,y=140)
 deposit_notif=ct.CTkLabel(depo_screen,font=('Portico Diagnol',12,),text="")
 deposit_notif.grid(row=4)
 
-ct.CTkEntry(depo_screen,width=60).grid(row=2,column=1)
-ct.CTkEntry(depo_screen,width=60).grid(row=3,column=1)
-ct.CTkEntry(depo_screen,width=60).grid(row=4,column=1)
+ct.CTkEntry(depo_screen,width=100).place(x=150,y=60)
+ct.CTkEntry(depo_screen,width=100).place(x=150,y=100)
+ct.CTkEntry(depo_screen,width=100).place(x=150,y=140)
         
 
-ct.CTkButton(depo_screen,text="Deposit now").grid(row=6)
+ct.CTkButton(depo_screen,text="Deposit now").place(x=150,y=220)
 
 root.mainloop()
