@@ -280,7 +280,7 @@ if cnx.is_connected():
                           query3="insert into new_details (NAME,AGE,Gender,Phone_no,EMAIL,password) values('{}',{},'{}',{},'{}','{}');".format(name,age1,gender,pn1,email,password)
                           cur.execute(query3)
                           cnx.commit()
-                          y="select Account_ID from new_details where password='{}';".format(password)
+                          y="select Account_ID from new_details where password='{}' and EMAIL='{}';".format(password,email)
                           cur.execute(y)
                           data=cur.fetchone()
                           acc_no=str(data[0])
