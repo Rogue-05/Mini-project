@@ -14,21 +14,21 @@ transfer_screen.title("TRANSFERS")
 
 ct.CTkLabel(transfer_screen,text="TRANSFER HERE",font=('Portico Diagnol',24)).place(x=150,y=0)
         
-ct.CTkLabel(transfer_screen,text="FROM ACCOUNT",font=('Portico Diagnol',16)).place(x=0,y=60)
-ct.CTkLabel(transfer_screen,text="TO ACCOUNT",font=('Portico Diagnol',16)).place(x=0,y=100)
-ct.CTkLabel(transfer_screen,text="AMOUNT",font=('Portico Diagnol',16)).place(x=0,y=140)
-ct.CTkLabel(transfer_screen,text="PASSWORD",font=('Portico Diagnol',16)).place(x=0,y=180)
+
+ct.CTkLabel(transfer_screen,text="TO ACCOUNT",font=('Portico Diagnol',16)).place(x=0,y=60)
+ct.CTkLabel(transfer_screen,text="AMOUNT",font=('Portico Diagnol',16)).place(x=0,y=100)
+ct.CTkLabel(transfer_screen,text="PASSWORD",font=('Portico Diagnol',16)).place(x=0,y=140)
 transfer_notif=Label(transfer_screen,font=('Portico Diagnol',16))
 transfer_notif.grid(row=6)
 
 ct.CTkEntry(transfer_screen,width=100).place(x=150,y=60)
 ct.CTkEntry(transfer_screen,width=100).place(x=150,y=100)
 ct.CTkEntry(transfer_screen,width=100).place(x=150,y=140)
-ct.CTkEntry(transfer_screen,width=100).place(x=150,y=180)
+
         
         
         
-ct.CTkButton(transfer_screen,text="TRANSFER NOW").place(x=150,y=260)
+ct.CTkButton(transfer_screen,text="TRANSFER NOW").place(x=150,y=200)
 
 
 root.mainloop()
