@@ -5,26 +5,26 @@
         global transfer_screen
         transfer_to=StringVar()
         amount=IntVar()
-        transfer_screen=Toplevel(root)
+        transfer_screen=ct.CTkToplevel(root)
         transfer_screen.title("Transfer")
         
 
-        Label(transfer_screen,text="transfer here",font=('Calibri',12)).grid(row=0,sticky=N)
+        ct.CTkLabel(transfer_screen,text="transfer here",font=('Calibri',12)).grid(row=0,sticky=N)
         
-        Label(transfer_screen,text="to account:",font=('Calibri',12)).grid(row=2,sticky=W)
-        Label(transfer_screen,text="Amount :",font=('Calibri',12)).grid(row=3,sticky=W)
-        transfer_notif=Label(transfer_screen,font=('Calibri',12))
+        ct.CTkLabel(transfer_screen,text="to account:",font=('Calibri',12)).grid(row=2,sticky=W)
+        ct.CTkLabel(transfer_screen,text="Amount :",font=('Calibri',12)).grid(row=3,sticky=W)
+        transfer_notif=ct.CTkLabel(transfer_screen,font=('Calibri',12))
         transfer_notif.grid(row=8)
 
-        Entry(transfer_screen,textvariable=transfer_to,width=20).grid(row=2,column=1)
-        Entry(transfer_screen,textvariable=amount,width=20).grid(row=3,column=1)
+        ct.CTkEntry(transfer_screen,textvariable=transfer_to,width=20).grid(row=2,column=1)
+        ct.CTkEntry(transfer_screen,textvariable=amount,width=20).grid(row=3,column=1)
         
         
-        Button(transfer_screen,text="transfer now",command=finish_transfer,padx=30).grid(row=6)
-        Button(transfer_screen,text="view bal",command=view_tran,padx=30).grid(row=7)
+        ct.CTkButton(transfer_screen,text="transfer now",command=finish_transfer,padx=30).grid(row=6)
+        ct.CTkButton(transfer_screen,text="view bal",command=view_tran,padx=30).grid(row=7)
 
     def view_tran():
-        query="select * from bank where name='{}' and password='{}';".format(u_name,pwd)
+        query="select * from new_details where name='{}' and password='{}';".format(u_name,pwd)
         cur.execute(query)
         data=cur.fetchone()
         
@@ -32,36 +32,36 @@
         upd_balance=data[4]
 
         global bal_screen
-        bal_screen=Toplevel(root)
+        bal_screen=ct.CTkToplevel(root)
         bal_screen.title("Transfer Finish")
-        Label(bal_screen,text="Your balance is :"+str(upd_balance),font=('Calibri',12)).grid(row=0,sticky=N)
+        ct.CTkLabel(bal_screen,text="Your balance is :"+str(upd_balance),font=('Calibri',12)).grid(row=0,sticky=N)
 
 
     def finish_transfer():
         global transfer_to,amount
         global transfer_notif
 
-        query="select * from bank where name='{}' and password='{}';".format(u_name,pwd)
+        query="select * from new_details where name='{}' and password='{}';".format(u_name,pwd)
         cur.execute(query)
         data=cur.fetchone()
 
         user_name = data[0]
         print("user:", user_name, type(user_name), "\nto_acc:", transfer_to.get(), type(transfer_to.get()))
 
-        from_user= "select balance from bank where name = '{}'".format(user_name)
+        from_user= "select balance from new_details where name = '{}'".format(user_name)
         cur.execute(from_user)
         from_money=cur.fetchone()[0]
 
-        to_user= "select balance from bank where name = '{}'".format(transfer_to.get())
+        to_user= "select balance from new_details where name = '{}'".format(transfer_to.get())
         cur.execute(to_user)
         to_money=cur.fetchone()[0]
 
         rem_bal = from_money-amount.get()
-        remove_bal = "update bank set balance={} where name='{}';".format(rem_bal,user_name)
+        remove_bal = "update new_details set balance={} where name='{}';".format(rem_bal,user_name)
         cur.execute(remove_bal)
         cnx.commit()
         
-        add_bal = "update bank set balance={} where name='{}';".format(to_money+amount.get(),transfer_to.get())
+        add_bal = "update new_details set balance={} where name='{}';".format(to_money+amount.get(),transfer_to.get())
         cur.execute(add_bal)
         cnx.commit()
 
