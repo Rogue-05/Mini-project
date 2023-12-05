@@ -120,6 +120,8 @@ if cnx.is_connected():
                     return
        def des():
               dashboard.destroy()
+              noti=ct.CTkLabel(root,text='LOG OUT SUCCESSFUL!!',font=('Portico Diagonal',30),text_color='green')
+              noti.place(x=100,y=400)
        def acc_details():
                           q5='select * from mew_details where Account_ID={}'.format(acc_no)
                           cur.execute(q5)
