@@ -9,14 +9,14 @@ ct.set_default_color_theme('dark-blue')
 
 # Welcome Page
 root=ct.CTk()
-root.geometry("540x450")
+root.geometry("540x700")
 root.title("PES International Bank")
 
 # Make a regular expression
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
+cnx=mysql.connect(user='root',password='SQL123',host='localhost')
 
 if cnx.is_connected():
        print('connected')
@@ -350,8 +350,7 @@ if cnx.is_connected():
        button1.place(x=100,y=300)
        button2=ct.CTkButton(root,text='Sign Up',command=registration)
        button2.place(x=310,y=300)
-       
-       
+
 
 root.mainloop()
 
