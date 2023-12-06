@@ -9,7 +9,7 @@ ct.set_default_color_theme('dark-blue')
 
 # Welcome Page
 root=ct.CTk()
-root.geometry("540x700")
+root.geometry("540x450")
 root.title("PES International Bank")
 
 # Make a regular expression
@@ -101,7 +101,7 @@ if cnx.is_connected():
                     l2.place(x=75,y=35)
                     l1=ct.CTkLabel(dashboard,text='Welcome to PESIB, '+str(name),font=('Portico Diagonal',30),text_color='white')
                     l1.place(x=25)
-                    b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525')
+                    b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525',command=acc_details)
                     b1.place(x=25,y=150)
                     b2=ct.CTkButton(dashboard,text='Transaction',font=('Portico Diagonal',22),bg_color='#252525')
                     b2.place(x=25,y=200)
@@ -123,21 +123,47 @@ if cnx.is_connected():
               noti=ct.CTkLabel(root,text='LOG OUT SUCCESSFUL!!',font=('Portico Diagonal',30),text_color='green')
               noti.place(x=100,y=400)
        def acc_details():
-                          q5='select * from mew_details where Account_ID={}'.format(acc_no)
+                          global det_email,det_balance,det_age,det_pn,det_name
+
+                          q5='select * from new_details where Account_ID={}'.format(acc_no)
                           cur.execute(q5)
                           details_data=cur.fetchall()
                           for i in details_data:
                                 det_email=i[5]
                                 det_balance=i[7]
                                 det_age=i[2]
-                                det_gender=i[3]
-                                det_pn=[4]
+                                det_pn=i[4]
+                                det_name=i[1]
                           global acc_detailspage
                           
                           acc_detailspage=Toplevel(root)
                           acc_detailspage.title("ACCOUNT DETAILS")
-                          acc_detailspage.geometry("1000x500")
-                          acc_detailspage.configure(background='#252525')
+                          acc_detailspage.geometry("1200x700")
+                          acc_detailspage.configure(background='#18140f')
+
+                          l1=ct.CTkLabel(acc_detailspage,text='NAME',font=('Portico Diagonal',22),text_color='white')
+                          l1.place(x=10,y=50)
+                          l2=ct.CTkLabel(acc_detailspage,text='** Account Details **',font=('Portico Diagonal',22),text_color='white')
+                          l2.place(x=50,y=0)
+                          l6=ct.CTkLabel(acc_detailspage,text='Phone Number',font=('Portico Diagonal',22),text_color='white')
+                          l6.place(x=10,y=150)
+                          l3=ct.CTkLabel(acc_detailspage,text='Email-ID',font=('Portico Diagonal',22),text_color='white')
+                          l3.place(x=10,y=250)
+                          l4=ct.CTkLabel(acc_detailspage,text='Age',font=('Portico Diagonal',22),text_color='white')
+                          l4.place(x=10,y=100)
+                          l5=ct.CTkLabel(acc_detailspage,text='Balance',font=('Portico Diagonal',22),text_color='white')
+                          l5.place(x=10,y=200)
+                          l7=ct.CTkLabel(acc_detailspage,text=''+str(det_balance),font=('Portico Diagonal',22),text_color='white')
+                          l7.place(x=200,y=200)
+                          l8=ct.CTkLabel(acc_detailspage,text=''+str(det_pn),font=('Portico Diagonal',22),text_color='white')
+                          l8.place(x=200,y=150)
+                          l9=ct.CTkLabel(acc_detailspage,text=''+str(det_email),font=('Portico Diagonal',22),text_color='white')
+                          l9.place(x=200,y=250)
+                          la=ct.CTkLabel(acc_detailspage,text=''+str(det_name),font=('Portico Diagonal',22),text_color='white')
+                          la.place(x=200,y=50)
+                          la1=ct.CTkLabel(acc_detailspage,text=''+str(det_age),font=('Portico Diagonal',22),text_color='white')
+                          la1.place(x=200,y=100)
+
                                   
        def forgot_password():
               global for_pass
@@ -350,7 +376,8 @@ if cnx.is_connected():
        button1.place(x=100,y=300)
        button2=ct.CTkButton(root,text='Sign Up',command=registration)
        button2.place(x=310,y=300)
-
+       
+       
 
 root.mainloop()
 
