@@ -8,10 +8,12 @@
                           global updated_bal_sender
                           global updated_bal_rec
                           global transfer_notif
+                          global sender_name
                           to_acc=IntVar()
                           trans_amt=IntVar()
                           current_balance_sender=IntVar()
                           passwd=StringVar()
+                          to_name=StringVar()
                           #take input for to_acc to_name passwd trans_amt
                           #define transfer_notif
 
@@ -22,6 +24,7 @@
                           for i in trans_data:
                                 current_balance_sender=i[7]
                                 trans_pwd=i[6]
+                                sender_name=i[1]
                           if passwd==trans_pwd:
                                 print("valid password")
                                 if trans_amt>current_balance_sender or trans_amt<=0:
@@ -35,8 +38,17 @@
                                      trans3="select BALANCE from new_details where Account_ID={};".format(to_acc)
                                      cur.execute(trans3)
                                      tdata=cur.fetchall()
-                                     curr_bal_rec=tdata[0][0]
+                                     curr_bal_rec=tdata[0][7]
                                      updated_bal_rec=curr_bal_rec+trans_amt
-                                     trans4="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_rec,to_acc)
+                                     trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,to_acc)
                                      cur.execute(trans4)
+                                     cnx.commit()
+                                     trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
+                                     cur.execute(trans5)
+                                     cnx.commit()
+                                     history3="insert into sender_history({},'{}',{},{},{},{},Default);".format(acc_no,to_name,to_acc,trans_amt,current_balance_sender,updated_bal_sender)
+                                     cur.execute(history3)
+                                     cnx.commit()
+                                     history4="insert into rec_history({},'{}',{},{},{},{},Default);".format(to_acc,sender_name,acc_no,trans_amt,curr_bal_rec,updated_bal_rec)
+                                     cur.execute(history4)
                                      cnx.commit()
