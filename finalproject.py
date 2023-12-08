@@ -107,11 +107,11 @@ if cnx.is_connected():
                     l1.place(x=25)
                     b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525',command=acc_details)
                     b1.place(x=25,y=150)
-                    b2=ct.CTkButton(dashboard,text='Transaction',font=('Portico Diagonal',22),bg_color='#252525')
+                    b2=ct.CTkButton(dashboard,text='Transaction',font=('Portico Diagonal',22),bg_color='#252525',command=transfer)
                     b2.place(x=25,y=200)
                     b3=ct.CTkButton(dashboard,text='Transfer History',font=('Portico Diagonal',22),bg_color='#252525')
                     b3.place(x=25,y=250)
-                    b4=ct.CTkButton(dashboard,text='Cards',font=('Portico Diagonal',22),bg_color='#252525')
+                    b4=ct.CTkButton(dashboard,text='Cards',font=('Portico Diagonal',22),bg_color='#252525',command=cards)
                     b4.place(x=25,y=300)
                     b5=ct.CTkButton(dashboard,text='Log out',font=('Portico Diagonal',22),bg_color='#252525',command=des)
                     b5.place(x=25,y=350)
@@ -122,10 +122,99 @@ if cnx.is_connected():
                  
                     notif2.configure(fg_color="red",text="Incorrect Details !")
                     return
+       def transfer():
+                          global to_acc
+                          global to_name
+                          global passwd
+                          global current_balance_sender
+                          global curr_bal_rec
+                          global trans_amt
+                          global updated_bal_sender
+                          global updated_bal_rec
+                          global transfer_notif
+                          global sender_name
+                          global transfer_notif1
+
+                          to_acc=StringVar()
+                          trans_amt=StringVar()
+                          current_balance_sender=IntVar()
+                          passwd=StringVar()
+                          to_name=StringVar()
+                          curr_bal_rec=IntVar()
+                          updated_bal_sender=IntVar()
+                          updated_bal_rec=IntVar()
+                          sender_name=StringVar()
+
+                          transfer_notif=Toplevel(root)
+                          transfer_notif.title("Transfer Screen")
+                          transfer_notif.geometry("1000x1000")
+                          transfer_notif.configure(background='#252525')
+                          
+                          lab1=ct.CTkLabel(transfer_notif,text="** Transfer Window **",font=('Portico Diagonal',30),text_color='white')
+                          lab1.place(x=25,y=0)
+                          lab2=ct.CTkLabel(transfer_notif,text='To Name',font=('Portico Diagonal',22),text_color='white')
+                          lab2.place(x=0,y=50)
+                          lab3=ct.CTkLabel(transfer_notif,text='To Account_ID',font=('Portico Diagonal',22),text_color='white')
+                          lab3.place(x=0,y=100)
+                          lab4=ct.CTkLabel(transfer_notif,text='Amount',font=('Portico Diagonal',22),text_color='white')
+                          lab4.place(x=0,y=150)
+                          lab5=ct.CTkLabel(transfer_notif,text='Password',font=('Portico Diagonal',22),text_color='white')
+                          lab5.place(x=0,y=200)
+
+                          ent1=ct.CTkEntry(transfer_notif,textvariable=to_name)
+                          ent1.place(x=250,y=50)
+                          ent1=ct.CTkEntry(transfer_notif,textvariable=to_acc)
+                          ent1.place(x=250,y=100)
+                          ent1=ct.CTkEntry(transfer_notif,textvariable=trans_amt)
+                          ent1.place(x=250,y=150)
+                          ent1=ct.CTkEntry(transfer_notif,textvariable=passwd)
+                          ent1.place(x=250,y=200)
+
+                          b1=ct.CTkButton(transfer_notif,text='Transfer Now',font=('Portico Diagonal',22),text_color='white',command=finish_transfer)
+                          b1.place(x=250,y=300)
+                          transfer_notif1=ct.CTkLabel(transfer_notif,text='',text_color='green',font=('Portico Diagonal',30))
+                          transfer_notif1.place(x=100,y=350)
+
+       def finish_transfer():
+                          trans1="select * from new_details where Account_ID={};".format(int(acc_no))
+                          cur.execute(trans1)
+                          trans_data=cur.fetchall()
+                          for i in trans_data:
+                                current_balance_sender=i[7]
+                                trans_pwd=i[6]
+                                sender_name=i[1]
+                          if passwd.get()==trans_pwd:
+                                print("valid password")
+                                if int(trans_amt.get())>current_balance_sender or int(trans_amt.get())<=0:
+                                      transfer_notif1.configure(text="Invalid Amount",text_color='red')
+                                else:
+                                     updated_bal_sender=current_balance_sender-int(trans_amt.get())
+                                     trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,int(acc_no))
+                                     cur.execute(trans2)
+                                     cnx.commit()
+                                     trans3="select * from new_details where Account_ID={};".format(int(to_acc.get()))
+                                     cur.execute(trans3)
+                                     tdata=cur.fetchall()
+                                     curr_bal_rec=tdata[0][7]
+                                     updated_bal_rec=curr_bal_rec+int(trans_amt.get())
+                                     trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,int(to_acc.get()))
+                                     cur.execute(trans4)
+                                     cnx.commit()
+                                     trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
+                                     cur.execute(trans5)
+                                     cnx.commit()
+                                     history3="insert into trans_history(Account_sender,NAME_rec,Account_rec,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(acc_no,to_name.get(),int(to_acc.get()),int(trans_amt.get()),current_balance_sender,updated_bal_sender)
+                                     cur.execute(history3)
+                                     cnx.commit()
+                                     history4="insert into rec_history(acc_of_receiver,name_of_sender,Account_sender,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(int(to_acc.get()),sender_name,acc_no,int(trans_amt.get()),curr_bal_rec,updated_bal_rec)
+                                     cur.execute(history4)
+                                     cnx.commit()
+                                     transfer_notif1.configure(text='Transferred Successfully',text_color='green')
        def des():
               dashboard.destroy()
               noti=ct.CTkLabel(root,text='LOG OUT SUCCESSFUL!!',font=('Portico Diagonal',30),text_color='green')
               noti.place(x=100,y=400)
+
        def acc_details():
                           global det_email,det_balance,det_age,det_pn,det_name
 
@@ -167,64 +256,6 @@ if cnx.is_connected():
                           la.place(x=200,y=50)
                           la1=ct.CTkLabel(acc_detailspage,text=''+str(det_age),font=('Portico Diagonal',22),text_color='white')
                           la1.place(x=200,y=100)
-       def transfer():
-                          global to_acc
-                          global to_name
-                          global passwd
-                          global current_balance_sender
-                          global curr_bal_rec
-                          global trans_amt
-                          global updated_bal_sender
-                          global updated_bal_rec
-                          global transfer_notif
-                          global sender_name
-                          to_acc=IntVar()
-                          trans_amt=IntVar()
-                          current_balance_sender=IntVar()
-                          passwd=StringVar()
-                          to_name=StringVar()
-                          curr_bal_rec=IntVar()
-                          updated_bal_sender=IntVar()
-                          updated_bal_rec=IntVar()
-                          sender_name=StringVar()
-                          #take input for to_acc to_name passwd trans_amt
-                          #define transfer_notif
-
-       def finish_transfer():
-                          trans1="select * from new_details where Account_ID={};".format(acc_no)
-                          cur.execute(trans1)
-                          trans_data=cur.fetchall()
-                          for i in trans_data:
-                                current_balance_sender=i[7]
-                                trans_pwd=i[6]
-                                sender_name=i[1]
-                          if passwd==trans_pwd:
-                                print("valid password")
-                                if trans_amt>current_balance_sender or trans_amt<=0:
-                                      pass
-                                      #transfer_notif.configure() display invalid amt
-                                else:
-                                     updated_bal_sender=current_balance_sender-trans_amt
-                                     trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,acc_no)
-                                     cur.execute(trans2)
-                                     cnx.commit()
-                                     trans3="select BALANCE from new_details where Account_ID={};".format(to_acc)
-                                     cur.execute(trans3)
-                                     tdata=cur.fetchall()
-                                     curr_bal_rec=tdata[0][7]
-                                     updated_bal_rec=curr_bal_rec+trans_amt
-                                     trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,to_acc)
-                                     cur.execute(trans4)
-                                     cnx.commit()
-                                     trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
-                                     cur.execute(trans5)
-                                     cnx.commit()
-                                     history3="insert into sender_history({},'{}',{},{},{},{},Default);".format(acc_no,to_name,to_acc,trans_amt,current_balance_sender,updated_bal_sender)
-                                     cur.execute(history3)
-                                     cnx.commit()
-                                     history4="insert into rec_history({},'{}',{},{},{},{},Default);".format(to_acc,sender_name,acc_no,trans_amt,curr_bal_rec,updated_bal_rec)
-                                     cur.execute(history4)
-                                     cnx.commit()
 
                                   
        def forgot_password():
@@ -375,6 +406,37 @@ if cnx.is_connected():
               b1=ct.CTkButton(Register_screen,text="Register now",font=('Portico Diagonal',15),command=finish_reg)
               b1.place(x=300,y=400)
 
+       def cards():
+
+              global card_screen
+              global photo2
+
+              card_screen=Toplevel(root)
+              card_screen.title("Card Details")
+              card_screen.geometry("1300x1000")
+              card_screen.configure(background='#252525')
+
+              lab1=ct.CTkLabel(card_screen,text='** Your Cards display **',font=('Portico Diagonal',26),text_color='white')
+              lab1.place(x=100,y=0)
+              b1=ct.CTkButton(card_screen,text='New Card',font=('Portico Diagonal',20),bg_color='#252525',command=new_card)
+              b1.place(x=200,y=400)
+              if True:
+                     photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PngItem_2918764.png"),size=(500,300))
+                     lab2=ct.CTkLabel(card_screen,text='',image=photo2)
+                     lab2.place(x=50,y=50)
+
+       def new_card():
+              card_create=Toplevel(root)
+              card_create.title("NEW CARD PAGE")
+              card_create.geometry("1300x1000")
+              card_create.configure(background='#252525')
+
+              lab1=ct.CTkLabel(card_create,text='** Your new card **',font=('Portico Diagonal',30),text_color='white')
+              lab1.place(x=50,y=0)
+              lab2=ct.CTkLabel(card_create,text='',image=photo2)
+              lab2.place(x=50,y=100)
+
+
        def finish_reg():
 
               global acc_no
@@ -442,6 +504,7 @@ if cnx.is_connected():
        
 
 root.mainloop()
+
 
 
 
