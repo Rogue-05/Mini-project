@@ -25,6 +25,10 @@ if cnx.is_connected():
        cur.execute('use project;')
        q1="create table if not exists new_details(Account_ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no BIGINT,EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 10000);"
        cur.execute(q1)
+       history1="create table if not exists trans_history(Account_sender int NOT NULL PRIMARY KEY,NAME_rec varchar(50) NOT NULL,Account_rec int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRANS_TYPE varchar(20) Default 'AMOUNT SENT');"
+       cur.execute(history1)
+       history2="create table if not exists rec_history(acc_of_receiver int NOT NULL PRIMARY KEY,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT RECEIVED');"
+       cur.execute(history2)
        
 
        def login():
@@ -163,6 +167,64 @@ if cnx.is_connected():
                           la.place(x=200,y=50)
                           la1=ct.CTkLabel(acc_detailspage,text=''+str(det_age),font=('Portico Diagonal',22),text_color='white')
                           la1.place(x=200,y=100)
+       def transfer():
+                          global to_acc
+                          global to_name
+                          global passwd
+                          global current_balance_sender
+                          global curr_bal_rec
+                          global trans_amt
+                          global updated_bal_sender
+                          global updated_bal_rec
+                          global transfer_notif
+                          global sender_name
+                          to_acc=IntVar()
+                          trans_amt=IntVar()
+                          current_balance_sender=IntVar()
+                          passwd=StringVar()
+                          to_name=StringVar()
+                          curr_bal_rec=IntVar()
+                          updated_bal_sender=IntVar()
+                          updated_bal_rec=IntVar()
+                          sender_name=StringVar()
+                          #take input for to_acc to_name passwd trans_amt
+                          #define transfer_notif
+
+       def finish_transfer():
+                          trans1="select * from new_details where Account_ID={};".format(acc_no)
+                          cur.execute(trans1)
+                          trans_data=cur.fetchall()
+                          for i in trans_data:
+                                current_balance_sender=i[7]
+                                trans_pwd=i[6]
+                                sender_name=i[1]
+                          if passwd==trans_pwd:
+                                print("valid password")
+                                if trans_amt>current_balance_sender or trans_amt<=0:
+                                      pass
+                                      #transfer_notif.configure() display invalid amt
+                                else:
+                                     updated_bal_sender=current_balance_sender-trans_amt
+                                     trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,acc_no)
+                                     cur.execute(trans2)
+                                     cnx.commit()
+                                     trans3="select BALANCE from new_details where Account_ID={};".format(to_acc)
+                                     cur.execute(trans3)
+                                     tdata=cur.fetchall()
+                                     curr_bal_rec=tdata[0][7]
+                                     updated_bal_rec=curr_bal_rec+trans_amt
+                                     trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,to_acc)
+                                     cur.execute(trans4)
+                                     cnx.commit()
+                                     trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
+                                     cur.execute(trans5)
+                                     cnx.commit()
+                                     history3="insert into sender_history({},'{}',{},{},{},{},Default);".format(acc_no,to_name,to_acc,trans_amt,current_balance_sender,updated_bal_sender)
+                                     cur.execute(history3)
+                                     cnx.commit()
+                                     history4="insert into rec_history({},'{}',{},{},{},{},Default);".format(to_acc,sender_name,acc_no,trans_amt,curr_bal_rec,updated_bal_rec)
+                                     cur.execute(history4)
+                                     cnx.commit()
 
                                   
        def forgot_password():
