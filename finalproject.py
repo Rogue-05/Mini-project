@@ -173,7 +173,7 @@ if cnx.is_connected():
                           b1=ct.CTkButton(transfer_notif,text='Transfer Now',font=('Portico Diagonal',22),text_color='white',command=finish_transfer)
                           b1.place(x=250,y=300)
                           transfer_notif1=ct.CTkLabel(transfer_notif,text='',text_color='green',font=('Portico Diagonal',30))
-                          transfer_notif1.place(x=100,y=350)
+                          transfer_notif1.place(x=50,y=350)
 
        def finish_transfer():
                           trans1="select * from new_details where Account_ID={};".format(int(acc_no))
@@ -186,7 +186,7 @@ if cnx.is_connected():
                           if passwd.get()==trans_pwd:
                                 print("valid password")
                                 if int(trans_amt.get())>current_balance_sender or int(trans_amt.get())<=0:
-                                      transfer_notif1.configure(text="Invalid Amount",text_color='red')
+                                      transfer_notif1.configure(text="Invalid Amount",text_color='red')                            
                                 else:
                                      updated_bal_sender=current_balance_sender-int(trans_amt.get())
                                      trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,int(acc_no))
@@ -210,6 +210,9 @@ if cnx.is_connected():
                                      cur.execute(history4)
                                      cnx.commit()
                                      transfer_notif1.configure(text='Transferred Successfully',text_color='green')
+                          else:
+                                 transfer_notif1.configure(text='Invalid Password',text_color='Red')
+                                 
        def des():
               dashboard.destroy()
               noti=ct.CTkLabel(root,text='LOG OUT SUCCESSFUL!!',font=('Portico Diagonal',30),text_color='green')
@@ -504,7 +507,6 @@ if cnx.is_connected():
        
 
 root.mainloop()
-
 
 
 
