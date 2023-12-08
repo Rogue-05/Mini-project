@@ -16,7 +16,7 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL123',host='localhost')
+cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
 
 if cnx.is_connected():
        print('connected')
@@ -25,9 +25,9 @@ if cnx.is_connected():
        cur.execute('use project;')
        q1="create table if not exists new_details(Account_ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no BIGINT,EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 10000);"
        cur.execute(q1)
-       history1="create table if not exists trans_history(Account_sender int NOT NULL PRIMARY KEY,NAME_rec varchar(50) NOT NULL,Account_rec int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRANS_TYPE varchar(20) Default 'AMOUNT SENT');"
+       history1="create table if not exists trans_history(Account_sender int NOT NULL,NAME_rec varchar(50) NOT NULL,Account_rec int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRANS_TYPE varchar(20) Default 'AMOUNT DEBITED');"
        cur.execute(history1)
-       history2="create table if not exists rec_history(acc_of_receiver int NOT NULL PRIMARY KEY,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT RECEIVED');"
+       history2="create table if not exists rec_history(acc_of_receiver int NOT NULL,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT CREDITED');"
        cur.execute(history2)
        
 
@@ -100,9 +100,9 @@ if cnx.is_connected():
                     dashboard.configure(background='#252525')
 
                     photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(150,100))
-
                     l2=ct.CTkLabel(dashboard,text='',image=photo1)
                     l2.place(x=75,y=35)
+
                     l1=ct.CTkLabel(dashboard,text='Welcome to PESIB, '+str(name),font=('Portico Diagonal',30),text_color='white')
                     l1.place(x=25)
                     b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525',command=acc_details)
@@ -192,24 +192,28 @@ if cnx.is_connected():
                                      trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,int(acc_no))
                                      cur.execute(trans2)
                                      cnx.commit()
-                                     trans3="select * from new_details where Account_ID={};".format(int(to_acc.get()))
+                                     trans3="select * from new_details where Account_ID={} and NAME='{}';".format(int(to_acc.get()),to_name.get())
                                      cur.execute(trans3)
                                      tdata=cur.fetchall()
-                                     curr_bal_rec=tdata[0][7]
-                                     updated_bal_rec=curr_bal_rec+int(trans_amt.get())
-                                     trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,int(to_acc.get()))
-                                     cur.execute(trans4)
-                                     cnx.commit()
-                                     trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
-                                     cur.execute(trans5)
-                                     cnx.commit()
-                                     history3="insert into trans_history(Account_sender,NAME_rec,Account_rec,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(acc_no,to_name.get(),int(to_acc.get()),int(trans_amt.get()),current_balance_sender,updated_bal_sender)
-                                     cur.execute(history3)
-                                     cnx.commit()
-                                     history4="insert into rec_history(acc_of_receiver,name_of_sender,Account_sender,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(int(to_acc.get()),sender_name,acc_no,int(trans_amt.get()),curr_bal_rec,updated_bal_rec)
-                                     cur.execute(history4)
-                                     cnx.commit()
-                                     transfer_notif1.configure(text='Transferred Successfully',text_color='green')
+                                     print(tdata)
+                                     if len(tdata)==0:
+                                            transfer_notif1.configure(text='INVALID ACCOUNT ID OR NAME ENTERED',text_color='RED')
+                                     else:
+                                          curr_bal_rec=tdata[0][7]
+                                          updated_bal_rec=curr_bal_rec+int(trans_amt.get())
+                                          trans4="update new_details set BALANCE={} where Account_ID='{}';".format(updated_bal_rec,int(to_acc.get()))
+                                          cur.execute(trans4)
+                                          cnx.commit()
+                                          trans5="update new_details set BALANCE={} where Account_ID={};".format(updated_bal_sender,acc_no)
+                                          cur.execute(trans5)
+                                          cnx.commit()
+                                          history3="insert into trans_history(Account_sender,NAME_rec,Account_rec,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(acc_no,to_name.get(),int(to_acc.get()),int(trans_amt.get()),current_balance_sender,updated_bal_sender)
+                                          cur.execute(history3)
+                                          cnx.commit()
+                                          history4="insert into rec_history(acc_of_receiver,name_of_sender,Account_sender,TRANSFERED_AMT,Balance_before,BALANCE_after) values({},'{}',{},{},{},{});".format(int(to_acc.get()),sender_name,acc_no,int(trans_amt.get()),curr_bal_rec,updated_bal_rec)
+                                          cur.execute(history4)
+                                          cnx.commit()
+                                          transfer_notif1.configure(text='Transferred Successfully',text_color='green')
                           else:
                                  transfer_notif1.configure(text='Invalid Password',text_color='Red')
                                  
@@ -507,7 +511,6 @@ if cnx.is_connected():
        
 
 root.mainloop()
-
 
 
 
