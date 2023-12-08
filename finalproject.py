@@ -16,7 +16,8 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
+cnx=mysql.connect(user='root',password='SQL123',host='localhost')
+photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\CreditCard.png"),size=(500,300))
 
 if cnx.is_connected():
        print('connected')
@@ -25,10 +26,12 @@ if cnx.is_connected():
        cur.execute('use project;')
        q1="create table if not exists new_details(Account_ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,NAME varchar(50) NOT NULL,AGE int NOT NULL,Gender varchar(2),Phone_no BIGINT,EMAIL varchar(50),password varchar(10) NOT NULL,BALANCE int Default 10000);"
        cur.execute(q1)
-       history1="create table if not exists trans_history(Account_sender int NOT NULL,NAME_rec varchar(50) NOT NULL,Account_rec int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRANS_TYPE varchar(20) Default 'AMOUNT DEBITED');"
+       history1="create table if not exists trans_history(Account_sender int NOT NULL ,NAME_rec varchar(50) NOT NULL,Account_rec int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRANS_TYPE varchar(20) Default 'AMOUNT DEBITED');"
        cur.execute(history1)
-       history2="create table if not exists rec_history(acc_of_receiver int NOT NULL,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT CREDITED');"
+       history2="create table if not exists rec_history(acc_of_receiver int NOT NULL ,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT CREDITED');"
        cur.execute(history2)
+       his3='create table if not exists card_details(Account_ID int, NAME varchar(50), Card_number BIGINT);'
+       cur.execute(his3)
        
 
        def login():
@@ -100,9 +103,9 @@ if cnx.is_connected():
                     dashboard.configure(background='#252525')
 
                     photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(150,100))
+
                     l2=ct.CTkLabel(dashboard,text='',image=photo1)
                     l2.place(x=75,y=35)
-
                     l1=ct.CTkLabel(dashboard,text='Welcome to PESIB, '+str(name),font=('Portico Diagonal',30),text_color='white')
                     l1.place(x=25)
                     b1=ct.CTkButton(dashboard,text='Account Details',font=('Portico Diagonal',22),bg_color='#252525',command=acc_details)
@@ -111,7 +114,7 @@ if cnx.is_connected():
                     b2.place(x=25,y=200)
                     b3=ct.CTkButton(dashboard,text='Transfer History',font=('Portico Diagonal',22),bg_color='#252525')
                     b3.place(x=25,y=250)
-                    b4=ct.CTkButton(dashboard,text='Cards',font=('Portico Diagonal',22),bg_color='#252525',command=cards)
+                    b4=ct.CTkButton(dashboard,text='Card',font=('Portico Diagonal',22),bg_color='#252525',command=cards)
                     b4.place(x=25,y=300)
                     b5=ct.CTkButton(dashboard,text='Log out',font=('Portico Diagonal',22),bg_color='#252525',command=des)
                     b5.place(x=25,y=350)
@@ -192,12 +195,11 @@ if cnx.is_connected():
                                      trans2="update new_details set BALANCE='{}' where Account_ID='{}';".format(updated_bal_sender,int(acc_no))
                                      cur.execute(trans2)
                                      cnx.commit()
-                                     trans3="select * from new_details where Account_ID={} and NAME='{}';".format(int(to_acc.get()),to_name.get())
+                                     trans3="select * from new_details where Account_ID={};".format(int(to_acc.get()))
                                      cur.execute(trans3)
                                      tdata=cur.fetchall()
-                                     print(tdata)
                                      if len(tdata)==0:
-                                            transfer_notif1.configure(text='INVALID ACCOUNT ID OR NAME ENTERED',text_color='RED')
+                                            transfer_notif1.configure(text='Invalid Details',text_color='red')
                                      else:
                                           curr_bal_rec=tdata[0][7]
                                           updated_bal_rec=curr_bal_rec+int(trans_amt.get())
@@ -417,20 +419,38 @@ if cnx.is_connected():
 
               global card_screen
               global photo2
+              global card_count
+
+              card_count=0
 
               card_screen=Toplevel(root)
               card_screen.title("Card Details")
               card_screen.geometry("1300x1000")
               card_screen.configure(background='#252525')
 
-              lab1=ct.CTkLabel(card_screen,text='** Your Cards display **',font=('Portico Diagonal',26),text_color='white')
+
+              lab1=ct.CTkLabel(card_screen,text='** Your Card display **',font=('Portico Diagonal',26),text_color='white')
               lab1.place(x=100,y=0)
-              b1=ct.CTkButton(card_screen,text='New Card',font=('Portico Diagonal',20),bg_color='#252525',command=new_card)
-              b1.place(x=200,y=400)
-              if True:
-                     photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PngItem_2918764.png"),size=(500,300))
+              q2="select * from card_details where Account_ID={}".format(acc_no)
+              cur.execute(q2)
+              data=cur.fetchone()
+
+              for i in data:
+                     account=i[0]
+                     name=i[1]
+                     number=i[2]
+
+              if len(data)!=0:
                      lab2=ct.CTkLabel(card_screen,text='',image=photo2)
                      lab2.place(x=50,y=50)
+                     lab3=ct.CTkLabel(card_screen,text=''+str(name),font=('Portico Diagonal',20),text_color='white')
+                     lab3.place()
+                     
+
+              else:
+                     b1=ct.CTkButton(card_screen,text='New Card',font=('Portico Diagonal',20),bg_color='#252525',command=new_card)
+                     b1.place(x=200,y=400)
+
 
        def new_card():
               card_create=Toplevel(root)
