@@ -14,6 +14,9 @@
                           current_balance_sender=IntVar()
                           passwd=StringVar()
                           to_name=StringVar()
+                          updated_bal_sender=IntVar()
+                          updated_bal_rec=IntVar()
+                          sender_name=StringVar()
                           #take input for to_acc to_name passwd trans_amt
                           #define transfer_notif
 
