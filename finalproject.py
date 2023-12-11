@@ -3,6 +3,7 @@ import customtkinter as ct
 from PIL import Image
 import mysql.connector as mysql
 import re
+import random
 
 ct.set_appearance_mode('dark')
 ct.set_default_color_theme('dark-blue')
@@ -17,7 +18,7 @@ root.title("PES International Bank")
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 cnx=mysql.connect(user='root',password='SQL123',host='localhost')
-photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\CreditCard.png"),size=(500,300))
+photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PES INTERNATIONAL BANK.png"),size=(500,300))
 
 if cnx.is_connected():
        print('connected')
@@ -30,7 +31,7 @@ if cnx.is_connected():
        cur.execute(history1)
        history2="create table if not exists rec_history(acc_of_receiver int NOT NULL ,name_of_sender varchar(50) NOT NULL,Account_sender int NOT NULL,TRANSFERED_AMT int NOT NULL,Balance_before int NOT NULL,BALANCE_after int NOT NULL,TRAN_TYPE varchar(20) Default 'AMOUNT CREDITED');"
        cur.execute(history2)
-       his3='create table if not exists card_details(Account_ID int, NAME varchar(50), Card_number BIGINT);'
+       his3='create table if not exists card_details(Account_ID int, NAME varchar(50), Card_number varchar(40));'
        cur.execute(his3)
        
 
@@ -112,7 +113,7 @@ if cnx.is_connected():
                     b1.place(x=25,y=150)
                     b2=ct.CTkButton(dashboard,text='Transaction',font=('Portico Diagonal',22),bg_color='#252525',command=transfer)
                     b2.place(x=25,y=200)
-                    b3=ct.CTkButton(dashboard,text='Transfer History',font=('Portico Diagonal',22),bg_color='#252525')
+                    b3=ct.CTkButton(dashboard,text='Transfer History',font=('Portico Diagonal',22),bg_color='#252525',command=History)
                     b3.place(x=25,y=250)
                     b4=ct.CTkButton(dashboard,text='Card',font=('Portico Diagonal',22),bg_color='#252525',command=cards)
                     b4.place(x=25,y=300)
@@ -176,7 +177,7 @@ if cnx.is_connected():
                           b1=ct.CTkButton(transfer_notif,text='Transfer Now',font=('Portico Diagonal',22),text_color='white',command=finish_transfer)
                           b1.place(x=250,y=300)
                           transfer_notif1=ct.CTkLabel(transfer_notif,text='',text_color='green',font=('Portico Diagonal',30))
-                          transfer_notif1.place(x=50,y=350)
+                          transfer_notif1.place(x=0,y=350)
 
        def finish_transfer():
                           trans1="select * from new_details where Account_ID={};".format(int(acc_no))
@@ -265,32 +266,55 @@ if cnx.is_connected():
                           la.place(x=200,y=50)
                           la1=ct.CTkLabel(acc_detailspage,text=''+str(det_age),font=('Portico Diagonal',22),text_color='white')
                           la1.place(x=200,y=100)
-        # module for history 
+        
        def History():
+
+              history=Toplevel(root)
+              history.geometry("1500x1000")
+              history.title("History")
+              history.configure(background='#252525')
+
+
               history5='select * from trans_history where Account_sender={};'.format(acc_no)
               cur.execute(history5)
               his_data=cur.fetchall()
-              print(his_data)
-              for i in his_data:
-                     print(i[0])
-                     print(i[1])
-                     print(i[2])
-                     print(i[3])
-                     print(i[4])
-                     print(i[5])
-                     print(i[6])
+
               history6='select * from rec_history where acc_of_receiver={};'.format(acc_no)
               cur.execute(history6)
               his_data1=cur.fetchall()
-              print(his_data1)
-              for j in his_data1:
-                     print(j[0])
-                     print(j[1])
-                     print(j[2])
-                     print(j[3])
-                     print(j[4])
-                     print(j[5])
-                     print(j[6])
+
+              for i in his_data:
+
+                                   
+                     global y 
+                     y=10
+                     send_acc=i[0]
+                     rec_name=i[1]
+                     rec_acc=i[2]
+                     trans_amount=i[3]
+                     bala_bef=i[4]
+                     bala_aft=i[5]
+                     type=i[6]
+                     label1=ct.CTkLabel(history,text=' '+str(rec_name)+'   '+str(rec_acc)+'   -'+str(trans_amount)+'   '+str(bala_bef)+'   '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='white')
+                     label1.grid(padx=0,pady=y)
+                     y+=10
+
+              
+              for i in his_data1:
+
+                     rece_acc=i[0]
+                     send_na=i[1]
+                     send_ac=i[2]
+                     trans_amount=i[3]
+                     bala_bef=i[4]
+                     bala_aft=i[5]
+                     type=i[6]
+                     label1=ct.CTkLabel(history,text=' '+str(send_na)+'   '+str(send_ac)+'   +'+str(trans_amount)+'   ' +str(bala_bef)+'   '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='white')
+                     label1.grid(padx=0,pady=y)
+
+              
+              
+              
                                   
        def forgot_password():
               global for_pass
@@ -451,7 +475,9 @@ if cnx.is_connected():
               card_screen=Toplevel(root)
               card_screen.title("Card Details")
               card_screen.geometry("1300x1000")
-              card_screen.configure(background='#252525')
+              card_screen.configure(background='black')
+
+              
 
 
               lab1=ct.CTkLabel(card_screen,text='** Your Card display **',font=('Portico Diagonal',26),text_color='white')
@@ -459,34 +485,64 @@ if cnx.is_connected():
               q2="select * from card_details where Account_ID={}".format(acc_no)
               cur.execute(q2)
               data=cur.fetchone()
-
-              for i in data:
-                     account=i[0]
-                     name=i[1]
-                     number=i[2]
-
-              if len(data)!=0:
+              
+              if data==None:
+                     b1=ct.CTkButton(card_screen,text='New Card',font=('Portico Diagonal',20),bg_color='black',command=new_card)
+                     b1.place(x=100,y=400)
+              else:
+                     for i in data:
+                            card_num=data[2]
+                            a = card_num[0:4]
+                            b = card_num[4:8]
+                            c = card_num[8:12]
+                            d = card_num[12:16]
+                            card_num=a+'  '+b+'  '+c+'  '+d
                      lab2=ct.CTkLabel(card_screen,text='',image=photo2)
                      lab2.place(x=50,y=50)
-                     lab3=ct.CTkLabel(card_screen,text=''+str(name),font=('Portico Diagonal',20),text_color='white')
-                     lab3.place()
-                     
+                     card_frame=ct.CTkFrame(lab2,width=250,height=80,fg_color='#f1f1f1',bg_color='#f1f1f1')
+                     card_frame.place(x=50,y=180)
+                     lab3=ct.CTkLabel(card_frame,text=''+str(name),font=('Norwester',22,),text_color='#545454')
+                     lab3.place(x=0,y=50)
+                     lab4=ct.CTkLabel(card_frame,text=''+str(card_num),font=('Norwester',22,),text_color='#545454')
+                     lab4.place(x=0,y=10)
+              
+              
 
-              else:
-                     b1=ct.CTkButton(card_screen,text='New Card',font=('Portico Diagonal',20),bg_color='#252525',command=new_card)
-                     b1.place(x=200,y=400)
+              
 
 
        def new_card():
+
+              global number1, number2, number3, number4
+
+              number1=random.randint(1000,9999)
+              number2=random.randint(1000,9999)
+              number3=random.randint(1000,9999)
+              number4=random.randint(1000,9999)
+
+              card_num=str(number1)+str(number2)+str(number3)+str(number4)
+
               card_create=Toplevel(root)
               card_create.title("NEW CARD PAGE")
               card_create.geometry("1300x1000")
-              card_create.configure(background='#252525')
+              card_create.configure(background='black')
+
+              q1="insert into card_details values({},'{}',{});".format(acc_no,name,card_num)
+              cur.execute(q1)
+              cnx.commit()
+
+              card_num=str(number1)+'  '+str(number2)+'  '+str(number3)+'  '+str(number4)
 
               lab1=ct.CTkLabel(card_create,text='** Your new card **',font=('Portico Diagonal',30),text_color='white')
               lab1.place(x=50,y=0)
               lab2=ct.CTkLabel(card_create,text='',image=photo2)
               lab2.place(x=50,y=100)
+              card_frame=ct.CTkFrame(lab2,width=250,height=80,fg_color='#f1f1f1',bg_color='#f1f1f1')
+              card_frame.place(x=50,y=180)
+              lab3=ct.CTkLabel(card_frame,text=''+str(name),font=('Norwester',22,),text_color='#545454')
+              lab3.place(x=0,y=50)
+              lab4=ct.CTkLabel(card_frame,text=''+card_num,font=('Norwester',22,),text_color='#545454')
+              lab4.place(x=0,y=10)
 
 
        def finish_reg():
