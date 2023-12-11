@@ -265,7 +265,32 @@ if cnx.is_connected():
                           la.place(x=200,y=50)
                           la1=ct.CTkLabel(acc_detailspage,text=''+str(det_age),font=('Portico Diagonal',22),text_color='white')
                           la1.place(x=200,y=100)
-
+        # module for history 
+       def History():
+              history5='select * from trans_history where Account_sender={};'.format(acc_no)
+              cur.execute(history5)
+              his_data=cur.fetchall()
+              print(his_data)
+              for i in his_data:
+                     print(i[0])
+                     print(i[1])
+                     print(i[2])
+                     print(i[3])
+                     print(i[4])
+                     print(i[5])
+                     print(i[6])
+              history6='select * from rec_history where acc_of_receiver={};'.format(acc_no)
+              cur.execute(history6)
+              his_data1=cur.fetchall()
+              print(his_data1)
+              for j in his_data1:
+                     print(j[0])
+                     print(j[1])
+                     print(j[2])
+                     print(j[3])
+                     print(j[4])
+                     print(j[5])
+                     print(j[6])
                                   
        def forgot_password():
               global for_pass
