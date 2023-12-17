@@ -561,11 +561,12 @@ if cnx.is_connected():
               email=temp_email.get()
               pn=(temp_phone.get())
               
-              age1=int(age)
-              pn1=int(pn)
-              if name=="" or age=="" or gender=="" or password=="" or email=="" or pn=="":
+             
+              if len(name)==0 or len(age)==0 or len(gender)==0 or len(password)==0 or len(email)==0 or len(pn)==0:
                      notif1.configure(fg_color="red",text="All fields need to be filled",font=('Portico Diagonal',16))
               if bool((re.fullmatch(regex, email)))==True:
+                     age1=int(age)
+                     pn1=int(pn)
                      chk=0
                      x="use project;"
                      cur.execute(x)
