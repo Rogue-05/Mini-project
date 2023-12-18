@@ -17,8 +17,8 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
-#photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PES INTERNATIONAL BANK.png"),size=(500,300))
+cnx=mysql.connect(user='root',password='SQL123',host='localhost',auth_plugin='mysql_native_password')
+photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PES INTERNATIONAL BANK.png"),size=(500,300))
 
 if cnx.is_connected():
        print('connected')
@@ -269,7 +269,7 @@ if cnx.is_connected():
        def History():
 
               history=Toplevel(root)
-              history.geometry("1500x1000")
+              history.geometry("2100x1000")
               history.title("History")
               history.configure(background='#252525')
 
@@ -294,7 +294,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text='Name: '+str(rec_name)+' Account ID: '+str(rec_acc)+' Amount: -'+str(trans_amount)+' Balance before: '+str(bala_bef)+' Balance After: '+str(bala_aft)+'   '+str(type),font=("Portico Diagonal",20),text_color='red')
+                     label1=ct.CTkLabel(history,text='Name : '+str(rec_name)+' ,Account ID : '+str(rec_acc)+' ,Amount : '+str(trans_amount)+' ,Balance_before : '+str(bala_bef)+' ,New_Balance : '+str(bala_aft)+'   '+str(type),font=("Arial",18),text_color='red')
                      label1.grid(padx=0,pady=y)
                      y+=10
 
@@ -308,7 +308,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text='Name: '+str(send_na)+' Account ID: '+str(send_ac)+' Amount: +'+str(trans_amount)+' Balance Before: ' +str(bala_bef)+' Balace After: '+str(bala_aft)+'   '+str(type),font=("Portico Diagonal",20),text_color='green')
+                     label1=ct.CTkLabel(history,text='Name : '+str(send_na)+' ,Account ID : '+str(send_ac)+' ,Amount : +'+str(trans_amount)+' ,Balance_before : ' +str(bala_bef)+' ,New_balance : '+str(bala_aft)+'   '+str(type),font=("Arial",18),text_color='green')
                      label1.grid(padx=0,pady=y)
 
               
