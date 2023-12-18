@@ -17,8 +17,8 @@ root.title("PES International Bank")
 # for validating an Email
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-cnx=mysql.connect(user='root',password='SQL123',host='localhost')
-photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PES INTERNATIONAL BANK.png"),size=(500,300))
+cnx=mysql.connect(user='root',password='SQL12345',host='localhost',auth_plugin='mysql_native_password')
+#photo2=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\PES INTERNATIONAL BANK.png"),size=(500,300))
 
 if cnx.is_connected():
        print('connected')
@@ -104,7 +104,6 @@ if cnx.is_connected():
                     dashboard.configure(background='#252525')
 
                     photo1=ct.CTkImage(dark_image=Image.open("C:\\Users\\samya\\Downloads\\Logo3.png"),size=(150,100))
-
                     l2=ct.CTkLabel(dashboard,text='',image=photo1)
                     l2.place(x=75,y=35)
                     l1=ct.CTkLabel(dashboard,text='Welcome to PESIB, '+str(name),font=('Portico Diagonal',30),text_color='white')
@@ -282,7 +281,7 @@ if cnx.is_connected():
               history6='select * from rec_history where acc_of_receiver={};'.format(acc_no)
               cur.execute(history6)
               his_data1=cur.fetchall()
-
+              
               for i in his_data:
 
                                    
@@ -295,7 +294,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text=' '+str(rec_name)+'   '+str(rec_acc)+'   -'+str(trans_amount)+'   '+str(bala_bef)+'   '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='white')
+                     label1=ct.CTkLabel(history,text='Name: '+str(rec_name)+' Account ID: '+str(rec_acc)+' Amount: '+str(trans_amount)+' Balance before: '+str(bala_bef)+' Balance After: '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='red')
                      label1.grid(padx=0,pady=y)
                      y+=10
 
@@ -309,7 +308,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text=' '+str(send_na)+'   '+str(send_ac)+'   +'+str(trans_amount)+'   ' +str(bala_bef)+'   '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='white')
+                     label1=ct.CTkLabel(history,text='Name: '+str(send_na)+' Account ID: '+str(send_ac)+' Amount: +'+str(trans_amount)+' Balance Before: ' +str(bala_bef)+' Balace After: '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='green')
                      label1.grid(padx=0,pady=y)
 
               
@@ -561,10 +560,10 @@ if cnx.is_connected():
               email=temp_email.get()
               pn=(temp_phone.get())
               
-             
+              
               if len(name)==0 or len(age)==0 or len(gender)==0 or len(password)==0 or len(email)==0 or len(pn)==0:
                      notif1.configure(fg_color="red",text="All fields need to be filled",font=('Portico Diagonal',16))
-              if bool((re.fullmatch(regex, email)))==True:
+              elif bool((re.fullmatch(regex, email)))==True:
                      age1=int(age)
                      pn1=int(pn)
                      chk=0
@@ -613,34 +612,3 @@ if cnx.is_connected():
        
 
 root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-    
-  
-         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-  
-         
