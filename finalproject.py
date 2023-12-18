@@ -294,7 +294,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text='Name: '+str(rec_name)+' Account ID: '+str(rec_acc)+' Amount: '+str(trans_amount)+' Balance before: '+str(bala_bef)+' Balance After: '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='red')
+                     label1=ct.CTkLabel(history,text='Name: '+str(rec_name)+' Account ID: '+str(rec_acc)+' Amount: -'+str(trans_amount)+' Balance before: '+str(bala_bef)+' Balance After: '+str(bala_aft)+'   '+str(type),font=("Portico Diagonal",20),text_color='red')
                      label1.grid(padx=0,pady=y)
                      y+=10
 
@@ -308,7 +308,7 @@ if cnx.is_connected():
                      bala_bef=i[4]
                      bala_aft=i[5]
                      type=i[6]
-                     label1=ct.CTkLabel(history,text='Name: '+str(send_na)+' Account ID: '+str(send_ac)+' Amount: +'+str(trans_amount)+' Balance Before: ' +str(bala_bef)+' Balace After: '+str(bala_aft)+'   '+str(type),font=("Arial",20),text_color='green')
+                     label1=ct.CTkLabel(history,text='Name: '+str(send_na)+' Account ID: '+str(send_ac)+' Amount: +'+str(trans_amount)+' Balance Before: ' +str(bala_bef)+' Balace After: '+str(bala_aft)+'   '+str(type),font=("Portico Diagonal",20),text_color='green')
                      label1.grid(padx=0,pady=y)
 
               
